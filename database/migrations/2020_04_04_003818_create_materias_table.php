@@ -21,6 +21,7 @@ class CreateMateriasTable extends Migration
             $table->string('creditos', 45);
             $table->string('horas', 45);
             $table->timestamps();
+            $table->string('state')->default('1');
         });
     }
 

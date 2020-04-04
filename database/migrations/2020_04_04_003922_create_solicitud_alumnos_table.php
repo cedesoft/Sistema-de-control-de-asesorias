@@ -27,6 +27,7 @@ class CreateSolicitudAlumnosTable extends Migration
             $table->foreign('id_materia')->references('id')->on('materias');
             $table->foreign('id_alumno')->references('id')->on('alumnos');
             $table->timestamps();
+            $table->string('state')->default('1');
         });
     }
 

@@ -20,6 +20,7 @@ class CreateAdministradorTable extends Migration
             $table->string('contraseña', 95);
             $table->string('imagen', 250);
             $table->timestamps();
+            $table->string('state')->default('1');
         });
     }
 

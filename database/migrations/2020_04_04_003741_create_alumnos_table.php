@@ -23,6 +23,7 @@ class CreateAlumnosTable extends Migration
             $table->string('id_carrera');
             $table->foreign('id_carrera')->references('id')->on('carreras');
             $table->timestamps();
+            $table->string('state')->default('1');
         });
     }
 
