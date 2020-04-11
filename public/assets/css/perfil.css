@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+
+html {
+    font-family: Arial;
+    font-size: 16px;
+    background-image:linear-gradient(
+        rgba(206, 206, 248, 0.5),
+        rgba(86, 123, 156, 0.5)
+      ), url("../images/login.jpeg");
+  }
+
+.sidebar {
+  position: fixed;
+  width: 20%;
+  height: 100vh;
+  background: linear-gradient(90deg,#0B225E,#102A6F
+    25%,#1e5372);
+  font-size: 0.65em;
+}
+
+.nav {
+  position: relative;
+  margin: 0 15%;
+  text-align: right;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  font-weight: bold;
+}
+
+.nav ul {
+  list-style: none;
+}
+.nav ul li {
+  position: relative;
+  margin: 3.2em 0;
+}
+.nav ul li a {
+  line-height: 5em;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.35);
+  display: block;
+  -webkit-transition: all ease-out 300ms;
+  transition: all ease-out 300ms;
+}
+.nav ul li.active a {
+  color: white;
+}
+.nav ul li:not(.active)::after {
+  opacity: 0.2;
+}
+.nav ul li:not(.active):hover a {
+  color: rgba(255, 255, 255, 0.75);
+}
+.nav ul li::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 0.2em;
+  background: black;
+  left: 0;
+  bottom: 0;
+  background-image: -webkit-gradient(linear, left top, right top, from(#2D77C1), to(#68FAC2));
+  background-image: linear-gradient(to left, #2D77C1, #68FAC2);
+}
+
+
+.twitter {
+    position: relative;
+    width: 75%;
+    float: right;
+    height: 100vh;
+    
+  }
+  .twitter .container {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+            flex-direction: column;
+    -webkit-box-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+            justify-content: center;
+    height: 100%;
+
+  }
+
+  .div {
+    opacity: 0.5;
+  }
+  
+
+ 

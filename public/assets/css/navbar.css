@@ -1,0 +1,17 @@
+#footer{
+    background: linear-gradient(90deg,#0B225E,#102A6F 25%,#1e5372);
+  
+}
+#footer h5{
+    color: white;
+
+}
+
+#fondo{
+background-image: linear-gradient(
+    rgba(230, 230, 250, 0.5),
+    rgba(240, 248, 255, 0.5)
+  ), url(../images/tec.jpg); 
+}
+
+
