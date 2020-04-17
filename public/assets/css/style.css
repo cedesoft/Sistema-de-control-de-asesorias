@@ -1,6 +1,6 @@
  #formulario{
     font  : 21px sans-serif;
-  padding : 2em;
+    padding : 2em;
     margin: 0 auto;
     text-align: center;
     border-radius: 15px;
@@ -29,8 +29,26 @@
 }
 #footer{
     background: linear-gradient(90deg,#0B225E,#102A6F 25%,#1e5372);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
 }
 #footer h5{
 	color: white;
+}
+
+#nav{
+    background: linear-gradient(90deg,#0B225E,#102A6F 25%,#1e5372);
+}
+
+html {
+    min-height: 100%;
+    position: relative;
+}
+
+body {
+    margin: 0;
+    margin-bottom: 40px;
 }
 

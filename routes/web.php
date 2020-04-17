@@ -11,15 +11,16 @@
 |
 */
 
-Route::get('/alumno', function () {
-    return view('admin/agregar_alumno_admin');
-});
+Route::get('/agregar/alumno','AlumnosController@create');
+Route::post('agregar/alumno','AlumnosController@store')->name('addAlumno');
+Route::post('agregar/excel','AlumnosController@import')->name('addExcel');
+Route::post('eliminar/alumno','AlumnosController@delete')->name('deleteStudent');
 
 Route::get('/carrera', function(){
     return view('admin/agregar_carrera_admin');
 });
 
-Route::get('/docente', function(){
+Route::get('/agregar/docente', function(){
     return view('admin/agregar_docente_admin');
 });
 
