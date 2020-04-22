@@ -2,51 +2,89 @@
 <html lang="en">
 
 <head>
+    <title>CRUD Admin</title>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Alumnos</title>
+
 
     <link rel="stylesheet" type="text/css" href="{!! asset('assets/css/style.css') !!}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
 </head>
 
 <body>
     <!-- NavBar -->
     <nav class="navbar navbar-expand-lg navbar-dark indigo" id="nav">
-        <a class="navbar-brand" href="#">Inicio</a>
+        
+        <a class="navbar-brand" href="{{ url('/') }}">
+            {{ config('app.name', 'Laravel') }}
+        </a>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        {{-- Parte izquierda del navBar --}}
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item ">
-                    <a class="nav-link" href="#">Docentes
+                    <a class="nav-link" href="{{url('agregar/docente')}}">Docentes
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Materias</a>
+                    <a class="nav-link" href="{{url('agregar/materia')}}">Materias</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Alumnos</a>
+                    <a class="nav-link " href="{{url('agregar/alumno')}}">Alumnos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Carreras</a>
+                    <a class="nav-link" href="{{url('agregar/carrera')}}">Carreras</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i>Reportes</i></a>
                 </li>
             </ul>
-            <span class="navbar-text white-text">
-                Administrador
-            </span>
+
+            {{-- Parte derecha del navBar --}}
+            <ul class="navbar-nav ml-auto">
+                <!-- Authentication Links -->
+                @guest
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                </li>
+                @if (Route::has('register'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                </li>
+                @endif
+                @else
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" class="d-inline-block align-top imgRedonda" alt="">
+                        {{ Auth::user()->name }} <span class="caret"></span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                </li>
+                @endguest
+            </ul>
         </div>
     </nav>
     <!--End NavBar -->
@@ -57,6 +95,7 @@
     @yield('agregar_docente')
     @yield('agregar_materias')
     @yield('reportes_admin')
+    
     <!-- Footer -->
     <footer id="footer" class="pb-4 pt-4">
         <div class="container">

@@ -35,6 +35,7 @@
                 @endforeach
             </select>
         </div>
+        
         <div id="b">
             <br>
             <button type="submit" class="btn btn-primary">
@@ -143,6 +144,5 @@
         });
     </script>
 </div>
-<br>
-<br>
+
 @endsection

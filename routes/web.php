@@ -16,17 +16,27 @@ Route::post('agregar/alumno','AlumnosController@store')->name('addAlumno');
 Route::post('agregar/excel','AlumnosController@import')->name('addExcel');
 Route::post('eliminar/alumno','AlumnosController@delete')->name('deleteStudent');
 
-Route::get('/carrera', function(){
-    return view('admin/agregar_carrera_admin');
+Route::get('/agregar/docente', 'DocentesController@create');
+Route::post('agregar/docente', 'DocentesController@store')->name('addDocente');
+Route::post('agregar/excel/docente','DocentesController@import')->name('addTeacherExcel');
+Route::post('eliminar/docente','DocentesController@delete')->name('deleteTeacher');
+
+Route::get('/agregar/materia', 'MateriasController@index');
+Route::post('agregar/materia', 'MateriasController@store')->name('addMateria');
+Route::post('agregar/excel/materia', 'MateriasController@import')->name('addSubjectsExcel');
+Route::post('eliminar/materia','MateriasController@delete')->name('deleteSubject');
+
+Route::get('/agregar/carrera', 'CarrerasController@index');
+Route::post('agregar/carrera', 'CarrerasController@store')->name('addCarrera');
+Route::post('eliminar/carrera','CarrerasController@delete')->name('deleteCarrera');
+
+
+
+Route::get('/', function(){
+    return view('welcome');
 });
 
-Route::get('/agregar/docente', function(){
-    return view('admin/agregar_docente_admin');
-});
 
-Route::get('/materias', function(){
-    return view('admin/agregar_materias_admin');
-});
 
 Route::get('/reportes', function(){
     return view('admin/reportes_admin');
@@ -83,3 +93,6 @@ Route::get('/docente/asesorias', function(){
 Route::get('/docente', function(){
     return view('docente/inicio_docente');
 });
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

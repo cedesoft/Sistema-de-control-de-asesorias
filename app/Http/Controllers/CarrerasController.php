@@ -4,17 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Alumnos;
 use App\Carreras;
-use App\User;
-use App\Roles;
-use App\Imports\AlumnosImport;
-use App\Imports\UserImport;
-use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Illuminate\Support\Facades\Hash;
 
-class AlumnosController extends Controller
+class CarrerasController extends Controller
 {
     public function __construct()
     {
@@ -28,7 +20,9 @@ class AlumnosController extends Controller
      */
     public function index()
     {
-        //
+        $carreras = DB::table('carreras')->get();
+
+        return view('admin/agregar_carrera_admin', compact('carreras'));
     }
 
     /**
@@ -38,9 +32,7 @@ class AlumnosController extends Controller
      */
     public function create()
     {
-        $alumno = Alumnos::all()->where('state','1');
-        $carreras = DB::table('carreras')->get();
-        return view('admin/agregar_alumno_admin', compact('carreras','alumno'));
+        //
     }
 
     /**
@@ -51,32 +43,13 @@ class AlumnosController extends Controller
      */
     public function store(Request $request)
     {
-        $alumno = new Alumnos();
-        $alumno->id = $request->input('num_control');
-        $alumno->nombre = $request->input('nombre'); 
-        $alumno->correo = $request->input('email');
-        $alumno->contraseña = $request->input('pass');
-        $alumno->imagen = "null";
-        $alumno->id_carrera = $request->input('carrera');
-        
-        $alumno->save();
+        $carrera = new Carreras();
+        $carrera->id = $request->input('clave');
+        $carrera->nombre = $request->input('nombre');
 
-        $user = new User();
-        $user->name = $request->input('nombre');
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('pass'));
+        $carrera->save();
 
-        $user->save();
-        $user->roles()->attach(Roles::where('nombre', 'user')->first());
-
-        return redirect(action('AlumnosController@create'))->with('success','Alumno creado exitosamente');
-    }
-
-    public function import()
-    {
-        (new AlumnosImport)->import(request()->file('excel'));
-        (new UserImport)->import(request()->file('excel'));
-        return redirect(action('AlumnosController@create'))->with('success','Archivo importado exitosamente');
+        return redirect(action('CarrerasController@index'))->with('success','Carrea creada exitosamente');
     }
 
     /**
@@ -87,12 +60,13 @@ class AlumnosController extends Controller
     public function delete(Request $request)
     {
         $id = $request->input('id');
-        $alumno = Alumnos::whereId($id)->firstOrFail();
-        $alumno->state = 0;
-        $alumno->save();
+        $carrera = Carreras::whereId($id)->firstOrFail();
+        $carrera->state = 0;
+        $carrera->save();
 
-        return redirect(action('AlumnosController@create'))->with('success','Alumno eliminado');
+        return redirect(action('CarrerasController@index'))->with('success','Carrera eliminada exitosamente');
     }
+
 
     /**
      * Display the specified resource.
@@ -136,6 +110,6 @@ class AlumnosController extends Controller
      */
     public function destroy($id)
     {
-        
+        //
     }
 }
