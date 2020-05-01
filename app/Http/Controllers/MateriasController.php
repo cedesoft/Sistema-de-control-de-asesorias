@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Imports\MateriasImport;
 use App\Materias;
+use App\Docentes;
 
 class MateriasController extends Controller
 {
@@ -21,10 +22,11 @@ class MateriasController extends Controller
      */
     public function index()
     {
-        //$materias = Materias::all()->where('state','1');
         $materias = DB::table('materias')->where('state','1')->get();
+        $carreras = DB::table('carreras')->get();
+        $docentes = DB::table('docentes')->where('state','1')->get();
 
-        return view('admin/agregar_materias_admin', compact('materias'));
+        return view('admin/agregar_materias_admin', compact('materias','carreras','docentes'));
     }
 
     /**
@@ -51,7 +53,10 @@ class MateriasController extends Controller
         $materia->descripcion = "null";
         $materia->creditos = $request->input('creditos');
         $materia->horas = $request->input('horas');
-        
+        $materia->semestre = $request->input('semestre');
+        $materia->id_carrera = $request->input('carrera');
+        $materia->id_docente = $request->input('docente');
+
         $materia->save();
         return redirect(action('MateriasController@index'))->with('success','Materia creada exitosamente');
     }

@@ -19,7 +19,7 @@
         <a class="navbar-brand" href="#">Inicio</a>
         <a class="nav-link" href="#">Acesorias</a>
         <a class="nav-link" href="#">Docentes</a>
-        <a class="nav-link" href="#">Materias</a>
+        <a class="nav-link" href="{{url('alumno/materias')}}">Materias</a>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">

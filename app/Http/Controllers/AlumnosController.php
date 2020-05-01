@@ -8,6 +8,9 @@ use App\Alumnos;
 use App\Carreras;
 use App\User;
 use App\Roles;
+use App\Materias;
+use App\Docentes;
+use App\SolicitudAlumno;
 use App\Imports\AlumnosImport;
 use App\Imports\UserImport;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -21,15 +24,7 @@ class AlumnosController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    //Funciones para el CRUD del Administrador
 
     /**
      * Show the form for creating a new resource.
@@ -95,17 +90,6 @@ class AlumnosController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -128,13 +112,99 @@ class AlumnosController extends Controller
         //
     }
 
+
+    //-------------Funciones para el Alumno-------------
+
     /**
-     * Remove the specified resource from storage.
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('alumno/inicio_alumno');
+    }
+
+    public function lista_Materias(){
+        //$materias = DB::table('materias')->where('state','1')->get();
+        $materias = DB::table('materias')
+                        ->leftJoin('docentes','materias.id_docente','=','docentes.id')
+                        ->select('materias.*','docentes.nombre as nombre_docente')
+                        ->get();
+        //dd($materias);
+
+        return view('alumno/lista_materias', compact('materias'));
+    }
+
+    public function lista_docentes(){
+        $docentes = DB::table('docentes')->where('state','1')->get();
+        $materias = DB::table('docentes')
+                        ->join('materias','docentes.id','=','materias.id_docente')
+                        ->select('materias.nombre as nom_materia','materias.id_docente','materias.id')
+                        ->where('materias.state',"=",'1','AND','docentes.state','=','1')
+                        ->get();
+
+        return view('alumno/lista_docentes', compact('docentes','materias'));
+    }
+
+    public function solicitar($id_materia, $id_docente){
+        //$materias = Materias::all()->where('state','1');
+        $materias = DB::table('materias')->where('state','1')->get();
+        return view('alumno/solicitar_asesorias', compact('id_docente','id_materia','materias'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function hacer_solicitud(Request $request)
+    {
+        $solicitud = new SolicitudAlumno();
+        $solicitud->status = "pendiente";
+        $solicitud->fechaSolicitud = date("y").'/'.date("m").'/'.date("d");
+        $solicitud->tema = $request->input('tema');
+        $solicitud->unidad = $request->input('unidad');
+        $solicitud->situacion_academica = $request->input('situacion');
+        $solicitud->id_docente = $request->input('docente');
+        $solicitud->id_materia = $request->input('materia');
+        $solicitud->id_alumno = $request->input('alumno');
+
+        $solicitud->save();
+
+        return redirect(action('AlumnosController@lista_Materias'));
+    }
+
+    public function solicitudes(Request $request){
+        $num = $request->user()->num_control;
+        //$solicitudes = DB::table('solicitud_alumnos')->where('state','1')->get();
+        $solicitudes = DB::table('solicitud_alumnos')
+                            ->leftjoin('docentes','solicitud_alumnos.id_docente','=','docentes.id')
+                            ->leftjoin('materias','solicitud_alumnos.id_materia','=','materias.id')
+                            ->leftjoin('alumnos','solicitud_alumnos.id_alumno','=','alumnos.id')
+                            ->select('solicitud_alumnos.*','docentes.nombre as nom_docente','materias.nombre as nom_materia','alumnos.nombre as nom_alumno')
+                            ->where('solicitud_alumnos.state','=','1')
+                            ->get();
+        return view('alumno/asesorias_alumno', compact('solicitudes','num'));
+    }
+
+    public function cancelar(Request $request){
+        $id = $request->input('id');
+        $solicitud = SolicitudAlumno::whereId($id)->firstOrFail();
+        $solicitud->state = 0;
+        $solicitud->save();
+
+        return redirect(action('AlumnosController@solicitudes'));
+    }
+
+    /**
+     * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function show($id)
     {
         
     }

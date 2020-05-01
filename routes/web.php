@@ -16,27 +16,31 @@ Route::post('agregar/alumno','AlumnosController@store')->name('addAlumno');
 Route::post('agregar/excel','AlumnosController@import')->name('addExcel');
 Route::post('eliminar/alumno','AlumnosController@delete')->name('deleteStudent');
 
-Route::get('/agregar/docente', 'DocentesController@create');
-Route::post('agregar/docente', 'DocentesController@store')->name('addDocente');
+Route::get('/agregar/docente','DocentesController@create');
+Route::post('agregar/docente','DocentesController@store')->name('addDocente');
 Route::post('agregar/excel/docente','DocentesController@import')->name('addTeacherExcel');
 Route::post('eliminar/docente','DocentesController@delete')->name('deleteTeacher');
 
-Route::get('/agregar/materia', 'MateriasController@index');
-Route::post('agregar/materia', 'MateriasController@store')->name('addMateria');
-Route::post('agregar/excel/materia', 'MateriasController@import')->name('addSubjectsExcel');
+Route::get('/agregar/materia','MateriasController@index');
+Route::post('agregar/materia','MateriasController@store')->name('addMateria');
+Route::post('agregar/excel/materia','MateriasController@import')->name('addSubjectsExcel');
 Route::post('eliminar/materia','MateriasController@delete')->name('deleteSubject');
 
-Route::get('/agregar/carrera', 'CarrerasController@index');
-Route::post('agregar/carrera', 'CarrerasController@store')->name('addCarrera');
+Route::get('/agregar/carrera','CarrerasController@index');
+Route::post('agregar/carrera','CarrerasController@store')->name('addCarrera');
 Route::post('eliminar/carrera','CarrerasController@delete')->name('deleteCarrera');
 
-
+Route::get('/alumno','AlumnosController@index');
+Route::get('/alumno/materias','AlumnosController@lista_Materias');
+Route::get('/alumno/solicitar/asesoria/{id_materia?}/{id_docente?}','AlumnosController@solicitar');
+Route::post('alumno/solicitar/asesoria/{id_materia?}/{id_docente?}','AlumnosController@hacer_solicitud')->name('realizarSolictud');
+Route::get('/asesorias/alumno','AlumnosController@solicitudes');
+Route::post('cancelar/solicitud/alumno','AlumnosController@cancelar')->name('cancel');
+Route::get('/alumno/docentes','AlumnosController@lista_docentes');
 
 Route::get('/', function(){
     return view('welcome');
 });
-
-
 
 Route::get('/reportes', function(){
     return view('admin/reportes_admin');
@@ -56,26 +60,6 @@ Route::get('/materia/coordinador', function(){
 
 Route::get('/reporte/coordinador', function(){
     return view('coordinador/reportes_coordi');
-});
-
-Route::get('/asesorias/alumno', function(){
-    return view('alumno/asesorias_alumno');
-});
-
-Route::get('/solicitar/alumno', function(){
-    return view('alumno/solicitar_asesorias');
-});
-
-Route::get('/materias/alumno', function(){
-    return view('alumno/lista_materias');
-});
-
-Route::get('/docentes/alumno', function(){
-    return view('alumno/lista_docentes');
-});
-
-Route::get('/alumno', function(){
-    return view('alumno/inicio_alumno');
 });
 
 Route::get('/docente/materias', function(){

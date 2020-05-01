@@ -1,5 +1,6 @@
 @extends('alumno/contenido_alumno')
 @section('asesorias_alumno')
+
 <br>
 <div class="container">
     <div>
@@ -64,8 +65,8 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-success">Modificar</button>
                                             </div>
+                                        </form>
                                     </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -99,29 +100,97 @@
             <div class="alert alert-primary" role="alert">
                 <h1 align="center">Solicitudes de Asesorías</h1>
             </div>
-            <div class="row m-o justify-content-center align-items-center ">
-                <div class="card w-75">
+            <div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                            aria-controls="home" aria-selected="true">Enviadas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                            aria-controls="profile" aria-selected="false">Recibidas</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        @foreach ($solicitudes as $item)
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                {!! $item->nom_materia !!}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{!! $item->nom_docente !!}</h5>
+                                <p class="card-text">Solicitaste una asesoria para el tema de <strong>{!! $item->tema
+                                        !!}</strong>
+                                    que corresponde a la unidad <strong>{!! $item->unidad !!}</strong> de la materia de
+                                    <strong>{!! $item->nom_materia !!}</strong>
+                                </p>
+                                <p>
+                                    Estado: {!! $item->status !!}
+                                </p>
+                                <a href="" class="btn btn-danger open-Modal" data-id="{!! $item->id !!}"
+                                    data-name="{!! $item->nom_materia !!}" data-toggle="modal"
+                                    data-target="#exampleModalCenter">Cancelar</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                {!! $item->fechaSolicitud !!}
+                            </div>
+                        </div>
+                        @endforeach
 
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="asesoriaARecibida.html">Recibidas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="asesoriaAEnviada.html">Enviadas</a>
-                            </li>
-                        </ul>
                     </div>
-                    <div class="card-body">
-                        <p align="right" class="card-text">Fecha de solicitud</p>
-                        <h5 class="card-title">Solicitud de "Docente"</h5>
-                        <p class="card-text">Para la unidad "" de la materia "".</p>
-                        <p class="card-text">Agendada para"" a las "" en "".</p>
-                        <div align="right"><a href="#" class="btn btn-danger">Cancelar Solicitud</a></div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                Featured 2
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional
+                                    content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
         </section>
     </div>
-</div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Eliminar materia</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Deseas cancelar la solicitud para la materia de <strong id="id_text"></strong>?
+                </div>
+                <div class="modal-footer">
+                    <form action="{{ route('cancel') }}" method="POST" enctype="multipart/form-data">
+                        {!! csrf_field() !!}
+                        <input type="text" class="d-none" id="id" name="id">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Eliminar</button>
+                    </form>
 
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Modal -->
+    <br><br><br>
+</div>
+<script>
+    $(document).on("click", ".open-Modal", function () {
+        var id = $(this).data('id');
+        var nombre = $(this).data('name');
+        $(".modal-body #id_text").text(nombre);
+        $(".modal-footer #id").val(id);
+    });
+</script>
 @endsection

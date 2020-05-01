@@ -7,22 +7,44 @@
     <h2><b>Materias</b></h2>
     <div class="form-row">
         <div class="form-group col-md-8">
-            <label id="l" for="name"><b>Nombre</b></label>
+            <label id="l" for="nombre"><b>Nombre</b></label>
             <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
         </div>
         <div class="form-group col-md-4">
-            <label id="l" for="2"><b>Clave</b></label>
+            <label id="l" for="clave"><b>Clave</b></label>
             <input type="text" class="form-control" id="clave" name="clave" placeholder="Clave" required>
         </div>
     </div>
     <div class="form-group ">
-        <label id="l" for="3"><b>Creditos</b></label>
-        <input type="text" class="form-control" id="creditos" name="creditos" aria-describedby="emailHelp"
-            placeholder="Creditos" required>
+        <label id="l" for="creditos"><b>Creditos</b></label>
+        <input type="text" class="form-control" id="creditos" name="creditos" placeholder="Creditos" required>
     </div>
     <div class="form-group">
-        <label id="l" for="4"><b>Horas</b></label>
+        <label id="l" for="horas"><b>Horas</b></label>
         <input type="text" class="form-control" id="horas" name="horas" placeholder="Horas por semana" required>
+    </div>
+
+    <div class="form-group">
+        <label id="l" for="semestre"><b>Semestre</b></label>
+        <input type="text" class="form-control" id="semestre" name="semestre" placeholder="Semestre en que se imparte" required>
+    </div>
+
+    <div class="form-group">
+        <label id="l" for="docente"><b>Docente</b></label>
+        <select class="form-control" id="docente" name="docente">
+            @foreach ($docentes as $item)
+            <option value="{!! $item->id !!}"> {!! $item->nombre !!} </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label id="l" for="carrera"><b>Carrera</b></label>
+        <select class="form-control" id="carrera" name="carrera">
+            @foreach ($carreras as $item)
+            <option> {!! $item->id !!} </option>
+            @endforeach
+        </select>
     </div>
 
     <div id="b">
@@ -74,6 +96,9 @@
                     <th>Nombre</th>
                     <th>Creditos</th>
                     <th>Horas</th>
+                    <th>Semestre</th>
+                    <th>Carrera</th>
+                    <th>Docente</th>
                     <th>Editar</th>
                     <th>Eliminar</th>
                 </tr>
@@ -90,6 +115,9 @@
                     <td>{!! $materia->nombre !!}</td>
                     <td>{!! $materia->creditos !!}</td>
                     <td>{!! $materia->horas !!}</td>
+                    <td>{!! $materia->semestre !!}</td>
+                    <td>{!! $materia->id_carrera !!}</td>
+                    <td>{!! $materia->id_docente !!}</td>
                     <td><a href="" class="btn btn-warning">Editar</a></td>
                     <td><a href="" class="btn btn-danger open-Modal" data-id="{!! $materia->id !!}"
                             data-name="{!! $materia->nombre !!}" data-toggle="modal"
@@ -99,6 +127,7 @@
                 @endif
             </tbody>
         </table>
+        <br><br>
     </div>
 </div>
 
