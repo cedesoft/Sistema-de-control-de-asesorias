@@ -20,6 +20,9 @@ class CreateMateriasTable extends Migration
             $table->longText('descripcion');
             $table->string('creditos', 45);
             $table->string('horas', 45);
+            $table->string('semestre', 15);
+            $table->string('id_carrera', 15);
+            $table->integer('id_docente');
             $table->timestamps();
             $table->string('state')->default('1');
         });

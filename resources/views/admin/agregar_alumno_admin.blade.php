@@ -35,7 +35,7 @@
                 @endforeach
             </select>
         </div>
-        
+
         <div id="b">
             <br>
             <button type="submit" class="btn btn-primary">
@@ -55,28 +55,31 @@
     </form>
 
     @if (session('success'))
-    <div class="container alert alert-success">
-        {{ session('success') }}
+    <div class="container">
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
     </div>
+
     @endif
 
     <br>
 </div>
 
 <div class="container">
-    <div class="d-flex justify-content-center">
-        <div class="form-group col-md-8">
-            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+    <form action="{{ route('searchStudent') }}" method="POST">
+        {!! csrf_field() !!}
+        <div class="d-flex justify-content-center">
+            <div class="form-group col-md-8">
+                <input class="form-control" type="text" placeholder="Buscar" aria-label="Search" id="buscar" name="buscar">
+            </div>
+            <div class="form-group col-md-4">
+                <button type="submit" class="btn btn-info">Buscar</button>
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <a href="#" class="btn btn-info btn-lg">
-                <span class="glyphicon glyphicon-search"></span> Buscar
-            </a>
-        </div>
-    </div>
+    </form>
+
 </div>
-
-
 
 <div class="container">
     <div class="form-group">
@@ -100,9 +103,12 @@
                     <td>{!! $alumnos->correo !!}</td>
                     <td>{!! $alumnos->contraseña !!}</td>
                     <td>{!! $alumnos->id_carrera !!}</td>
-                    <td><a href="" class="btn btn-warning">Editar</a></td>
-                    <td><a href="" class="btn btn-danger open-Modal" data-id="{!! $alumnos->id !!}" data-toggle="modal"
-                            data-target="#exampleModalCenter">Eliminar</a></td>
+                    <td><button class="btn btn-warning open-Editar" data-id="{!! $alumnos->id !!}"
+                            data-nombre="{!! $alumnos->nombre !!}" data-correo="{!! $alumnos->correo !!}"
+                            data-pass="{!! $alumnos->contraseña !!}" data-toggle="modal"
+                            data-target="#editarModal">Editar</button></td>
+                    <td><button class="btn btn-danger open-Modal" data-id="{!! $alumnos->id !!}" data-toggle="modal"
+                            data-target="#exampleModalCenter">Eliminar</button></td>
                 </tr>
                 @endforeach
             </tbody>
@@ -129,20 +135,76 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Eliminar</button>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
     <!--End Modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Editar alumno</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('editStudent') }}" method="POST">
+                    {!! csrf_field() !!}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name"><b>Nombre</b></label>
+                            <input type="text" class="form-control" id="name" name="name">
+                            <input type="text" name="alumno_id" id="alumno_id" class="d-none">
+                        </div>
 
+                        <div class="form-group">
+                            <label for="email"><b>Correo</b></label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pass"><b>Contraseña</b></label>
+                            <input type="text" class="form-control" id="pass" name="pass">
+                        </div>
+
+                        <div class="form-group">
+                            <label id="l" for="6"><b>Carrera</b></label>
+                            <select class="form-control" id="carrera" name="carrera">
+                                @foreach ($carreras as $item)
+                                <option> {!! $item->id !!} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--End Modal -->
     <script>
         $(document).on("click", ".open-Modal", function () {
             var id = $(this).data('id');
             $(".modal-body #id_text").text(id);
             $(".modal-footer #id").val(id);
         });
+        $(document).on("click", ".open-Editar", function () {
+            var id = $(this).data('id');
+            var nombre = $(this).data('nombre');
+            var correo = $(this).data('correo');
+            var pass = $(this).data('pass');
+            $(".modal-body #alumno_id").val(id);
+            $(".modal-body #name").val(nombre);
+            $(".modal-body #email").val(correo);
+            $(".modal-body #pass").val(pass);
+        });
     </script>
 </div>
-
+<br><br>
 @endsection

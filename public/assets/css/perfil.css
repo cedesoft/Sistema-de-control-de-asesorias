@@ -92,5 +92,9 @@ html {
     opacity: 0.5;
   }
   
-
- 
+.imgRedonda {
+    width:400px;
+    height:400px;
+    border-radius:150px;
+    border:1px solid #666;
+}

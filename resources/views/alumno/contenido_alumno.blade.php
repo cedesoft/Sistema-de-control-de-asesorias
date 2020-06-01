@@ -21,8 +21,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark indigo" id="nav">
 
-        <a class="navbar-brand" href="{{ url('/') }}">
-            {{ config('app.name', 'Laravel') }}
+        <a class="navbar-brand" href="{{ url('alumno') }}">
+            Inicio
         </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
@@ -32,14 +32,11 @@
 
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Solicitud</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('asesorias/alumno')}}">Asesorias</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Acesorias</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Docentes</a>
+                    <a class="nav-link" href="{{url('alumno/docentes')}}">Docentes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('alumno/materias')}}">Materias</a>
@@ -63,15 +60,16 @@
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80"
-                            class="d-inline-block align-top imgRedonda" alt="">
+                        <img src="{{ asset('uploads/Imagenes/' . $alumno->imagen) }}" class="d-inline-block align-top imgRedonda" alt="">
                         {{ Auth::user()->name }} <span class="caret"></span>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{url('alumnos/perfil')}}">Perfil</a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
+                            Cerrar sesión
                         </a>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

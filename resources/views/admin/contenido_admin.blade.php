@@ -20,10 +20,6 @@
 <body>
     <!-- NavBar -->
     <nav class="navbar navbar-expand-lg navbar-dark indigo" id="nav">
-        
-        <a class="navbar-brand" href="{{ url('/') }}">
-            {{ config('app.name', 'Laravel') }}
-        </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,8 +43,13 @@
                     <a class="nav-link" href="{{url('agregar/carrera')}}">Carreras</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i>Reportes</i></a>
+                    <a class="nav-link" href="{{url('reportes/admin')}}">Reportes</a>
                 </li>
+                @if (!Auth::user()->hasRole('coordinador'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('agregar/coordinador')}}">Coordinador</a>
+                </li>
+                @endif
             </ul>
 
             {{-- Parte derecha del navBar --}}
@@ -67,14 +68,21 @@
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" class="d-inline-block align-top imgRedonda" alt="">
+                        @if (Auth::user()->hasRole('coordinador'))
+                        <img src="{{ asset('uploads/Imagenes/' . $coordi->imagen) }}"
+                            class="d-inline-block align-top imgRedonda" alt="">
+                        @endif
                         {{ Auth::user()->name }} <span class="caret"></span>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        @if (Auth::user()->hasRole('coordinador'))
+                        <a class="dropdown-item" href="{{url('coordinador/perfil')}}">Perfil</a>
+                        <div class="dropdown-divider"></div>
+                        @endif
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
+                            Cerrar sesión
                         </a>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -94,7 +102,7 @@
     @yield('agregar_docente')
     @yield('agregar_materias')
     @yield('reportes_admin')
-    
+    @yield('agregar_coordi')
     <!-- Footer -->
     <footer id="footer" class="pb-4 pt-4">
         <div class="container">

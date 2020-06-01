@@ -26,9 +26,12 @@
 
 <br>
 @if (session('success'))
-<div class="container alert alert-success">
-    {{ session('success') }}
+<div class="container">
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
 </div>
+
 @endif
 
 <div class="container">
@@ -48,16 +51,18 @@
                     Aun no hay ningun registro.
                 </div>
                 @else
-                    @foreach ($carreras as $carrera)
-                    <tr>
-                        <td>{!! $carrera->id !!}</td>
-                        <td>{!! $carrera->nombre !!}</td>
-                        <td><a href="" class="btn btn-warning">Editar</a></td>
-                        <td><a href="" class="btn btn-danger open-Modal" data-id="{!! $carrera->id !!}"
-                                data-name="{!! $carrera->nombre !!}" data-toggle="modal"
-                                data-target="#exampleModalCenter">Eliminar</a></td>
-                    </tr>
-                    @endforeach
+                @foreach ($carreras as $carrera)
+                <tr>
+                    <td>{!! $carrera->id !!}</td>
+                    <td>{!! $carrera->nombre !!}</td>
+                    <td><a href="" class="btn btn-warning open-Editar" data-id="{!! $carrera->id !!}"
+                            data-name="{!! $carrera->nombre !!}" data-toggle="modal"
+                            data-target="#editarModal">Editar</a></td>
+                    <td><a href="" class="btn btn-danger open-Modal" data-id="{!! $carrera->id !!}"
+                            data-name="{!! $carrera->nombre !!}" data-toggle="modal"
+                            data-target="#exampleModalCenter">Eliminar</a></td>
+                </tr>
+                @endforeach
                 @endif
             </tbody>
         </table>
@@ -91,6 +96,39 @@
     </div>
 </div>
 <!--End Modal -->
+<!-- Modal -->
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Editar carrera</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('editCarrera') }}" method="POST">
+                {!! csrf_field() !!}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="clave"><b>Clave</b></label>
+                        <input type="text" class="form-control" id="clave" name="clave">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombre"><b>Nombre</b></label>
+                        <input type="text" class="form-control" id="nombre" name="nombre">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--End Modal -->
 
 <script>
     $(document).on("click", ".open-Modal", function () {
@@ -98,6 +136,12 @@
         var nombre = $(this).data('name');
         $(".modal-body #id_text").text(nombre);
         $(".modal-footer #id").val(id);
+    });
+    $(document).on("click", ".open-Editar", function () {
+        var id = $(this).data('id');
+        var nombre = $(this).data('name');
+        $(".modal-body #clave").val(id);
+        $(".modal-body #nombre").val(nombre);
     });
 </script>
 

@@ -18,11 +18,13 @@ class CarrerasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $carreras = DB::table('carreras')->get();
+        $nombre = $request->user()->name;
+        $coordi = DB::table('coordinador')->where('nombre',$nombre)->first();
+        $carreras = DB::table('carreras')->where('state','1')->get();
 
-        return view('admin/agregar_carrera_admin', compact('carreras'));
+        return view('admin/agregar_carrera_admin', compact('carreras','coordi'));
     }
 
     /**
@@ -82,12 +84,19 @@ class CarrerasController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $id = $request->input('clave');
+        $carrera = Carreras::whereId($id)->firstOrFail();
+        $carrera->id = $request->input('clave');
+        $carrera->nombre = $request->input('nombre');
+
+        $carrera->save();
+
+        return redirect(action('CarrerasController@index'))->with('success','Carrea editada exitosamente');
     }
 
     /**

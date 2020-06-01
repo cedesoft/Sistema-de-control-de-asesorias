@@ -21,18 +21,18 @@
         <h5 class="card-header">{!! $docente->nombre !!}</h5>
         <div class="card-body">
             <h5 class="card-title">Docente de {!! $docente->id_carrera !!}</h5>
-            <label for="exampleFormControlSelect1" class="card-text">Materias que imparte</label>
-            <select class="form-control" id="exampleFormControlSelect1">
+            <label for="exampleFormControlSelect1" class="card-text">Materias que imparte</label>           
+            <ul class="list-group list-group-flush">
                 @foreach ($materias as $item)
                     @if ($item->id_docente == $docente->id)
-                        <option value="{!! $item->id !!}">{!! $item->nom_materia !!}</option>
+                        <li class="list-group-item">{!! $item->nom_materia !!}</li>
                     @endif
                 @endforeach
-            </select>
-            <a href="{{action('AlumnosController@solicitar', ["null", $docente->id])}}" class="btn btn-success">Solicitar Asesoría</a>
+            </ul><br>
+            <a href="{{action('AlumnosController@solicitar', ["null", $docente->id])}}"
+                class="btn btn-success">Solicitar Asesoría</a>
         </div>
     </div>
     @endforeach
-
 </div><br><br><br>
 @endsection

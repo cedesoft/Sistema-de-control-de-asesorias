@@ -10,23 +10,28 @@ use App\Docentes;
 
 class MateriasController extends Controller
 {
-    public function __construct()
+    /* public function __construct()
     {
         $this->middleware('auth');
     }
-    
+     */
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $request->user()->authorizeRoles(['admin','coordinador']);
+
+        $nombre = $request->user()->name;
+        $coordi = DB::table('coordinador')->where('nombre',$nombre)->first();
+
         $materias = DB::table('materias')->where('state','1')->get();
         $carreras = DB::table('carreras')->get();
         $docentes = DB::table('docentes')->where('state','1')->get();
 
-        return view('admin/agregar_materias_admin', compact('materias','carreras','docentes'));
+        return view('admin/agregar_materias_admin', compact('materias','carreras','docentes','coordi'));
     }
 
     /**
@@ -47,6 +52,8 @@ class MateriasController extends Controller
      */
     public function store(Request $request)
     {
+        $request->user()->authorizeRoles(['admin','coordinador']);
+
         $materia = new Materias();
         $materia->id = $request->input('clave'); 
         $materia->nombre = $request->input('nombre');
@@ -74,6 +81,8 @@ class MateriasController extends Controller
      */
     public function delete(Request $request)
     {
+        $request->user()->authorizeRoles(['admin','coordinador']);
+
         $id = $request->input('id');
         $materia = Materias::whereId($id)->firstOrFail();
         $materia->state = 0;
@@ -85,23 +94,41 @@ class MateriasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['admin','coordinador']);
+
+        $nombre_c = $request->user()->name;
+        $coordi = DB::table('coordinador')->where('nombre',$nombre_c)->first();
+
+        $nombre = $request->input('buscar');
+        $materias = DB::table('materias')->where('nombre','like','%'.$nombre.'%')->where('state','1')->get();
+        $carreras = DB::table('carreras')->get();
+        $docentes = DB::table('docentes')->where('state','1')->get();
+        return view('admin/agregar_materias_admin', compact('materias','carreras','docentes','coordi'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['admin','coordinador']);
+        
+        $id = $request->input('id_materia');
+        $materia = Materias::whereId($id)->firstOrFail();
+        $materia->nombre = $request->input('name');
+        $materia->creditos = $request->input('creditos');
+        $materia->horas = $request->input('horas');
+        $materia->semestre = $request->input('semestre');
+        $materia->save();
+
+        return redirect(action('MateriasController@index'))->with('success','Materia editada exitosamente');
     }
 
     /**
@@ -112,17 +139,6 @@ class MateriasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }
