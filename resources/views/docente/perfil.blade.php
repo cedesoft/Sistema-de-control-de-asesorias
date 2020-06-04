@@ -16,8 +16,8 @@
             <nav class="nav">
                 <ul>
                     <li class="active"><a href="{{url('docente')}}">Inicio</a></li>
-                    <li><a href="{{url('asesorias/alumno')}}">Asesorías</a></li>
-                    <li><a href="{{url('agregar/materia')}}">Materias</a></li>
+                    <li><a href="{{url('docente/asesorias')}}">Asesorías</a></li>
+                    <li><a href="{{url('docente/materias')}}">Materias</a></li>
                 </ul>
             </nav>
         </aside>

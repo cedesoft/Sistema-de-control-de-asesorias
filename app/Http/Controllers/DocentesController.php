@@ -31,7 +31,7 @@ class DocentesController extends Controller
      */
     public function index(Request $request)
     {
-        $request->user()->authorizeRoles(['admin','coordinador']);
+        $request->user()->authorizeRoles(['docente']);
 
         $request->user()->authorizeRoles(['docente']);
         $nombre = $request->user()->name;
@@ -92,7 +92,7 @@ class DocentesController extends Controller
         (new DocentesImport)->import(request()->file('excel'));
         (new UserImport)->import(request()->file('excel'));
 
-        return redirect(action('DocentesController@create'))->with('success','Docente creado exitosamente');
+        return redirect(action('DocentesController@create'))->with('success','Docentes creados exitosamente');
     }
 
     /**
@@ -249,6 +249,7 @@ class DocentesController extends Controller
         $materias = DB::table('materias')
                         ->leftJoin('docentes','materias.id_docente','=','docentes.id')
                         ->select('materias.*','docentes.nombre as nombre_docente')
+                        ->where('materias.id_docente',$docente->id)
                         ->get();
 
         return view('docente/materias_docente', compact('materias','docente'));
@@ -260,18 +261,19 @@ class DocentesController extends Controller
         $nombre = $request->user()->name;
         $docente = DB::table('docentes')->where('nombre',$nombre)->first();
 
-        $materias = DB::table('materias')
+        $nom_materia = DB::table('materias')->where('id',$materia)->first();
+        /* $materias = DB::table('materias')
                         ->leftJoin('docentes','materias.id_docente','=','docentes.id')
                         ->select('materias.*')
                         ->where('docentes.nombre',$nombre)
-                        ->get();
+                        ->get(); */
 
         $alumnos = 0;
         $agregados = DB::table('alumnos_agregados')
                         ->leftjoin('alumnos','alumnos_agregados.num_control','=','alumnos.id')
                         ->select('alumnos_agregados.*','alumnos.nombre','alumnos.id_carrera')
                         ->get();
-        return view('docente/solicitud_docente', compact('materia','materias','alumnos','agregados','docente'));
+        return view('docente/solicitud_docente', compact('materia','nom_materia','alumnos','agregados','docente'));
     }
 
     public function buscar(Request $request){
@@ -285,13 +287,14 @@ class DocentesController extends Controller
         $alumno = DB::table('alumnos')->where('id',$id)->get();
 
         $materia = $request->input('materia');
+        $nom_materia = DB::table('materias')->where('id',$materia)->first();
 
         $agregados = DB::table('alumnos_agregados')
                         ->leftjoin('alumnos','alumnos_agregados.num_control','=','alumnos.id')
                         ->select('alumnos_agregados.*','alumnos.nombre','alumnos.id_carrera')
                         ->get();
 
-        return view('docente/solicitud_docente', compact('alumno', 'alumnos','agregados','docente','materia'));
+        return view('docente/solicitud_docente', compact('alumno', 'alumnos','agregados','docente','materia','nom_materia'));
     }
 
     public function AgregarAlumnos(Request $request){
@@ -306,13 +309,14 @@ class DocentesController extends Controller
         $alumnos = 0;
 
         $materia = $request->input('materia');
+        $nom_materia = DB::table('materias')->where('id',$materia)->first();
 
         $agregados = DB::table('alumnos_agregados')
                         ->leftjoin('alumnos','alumnos_agregados.num_control','=','alumnos.id')
                         ->select('alumnos_agregados.*','alumnos.nombre','alumnos.id_carrera')
                         ->get();
 
-        return view('docente/solicitud_docente', compact('alumnos','agregados','docente','materia'));
+        return view('docente/solicitud_docente', compact('alumnos','agregados','docente','materia','nom_materia'));
     }
 
     public function EliminarAlumnoAgregado(Request $request, $get_materia, $num_control){
@@ -325,13 +329,14 @@ class DocentesController extends Controller
         $alumnos = 0;
 
         $materia = $get_materia;
+        $nom_materia = DB::table('materias')->where('id',$materia)->first();
 
         $agregados = DB::table('alumnos_agregados')
                         ->leftjoin('alumnos','alumnos_agregados.num_control','=','alumnos.id')
                         ->select('alumnos_agregados.*','alumnos.nombre','alumnos.id_carrera')
                         ->get();
 
-        return view('docente/solicitud_docente', compact('alumnos','agregados','docente','materia'));
+        return view('docente/solicitud_docente', compact('alumnos','agregados','docente','materia','nom_materia'));
     }
 
     public function RealizarSolicitud(Request $request){
@@ -348,7 +353,7 @@ class DocentesController extends Controller
             $solicitar->tema = $request->input("tema");
             $solicitar->unidad = $request->input("unidad");
             $solicitar->situacion_academica = $request->input("situacion_academica");
-            $solicitar->id_docente = 2;
+            $solicitar->id_docente = $request->input('docente');
             $solicitar->id_materia = $request->input('materia');
             $solicitar->id_alumno = $request->input($i+1);
             $solicitar->save();
@@ -397,11 +402,8 @@ class DocentesController extends Controller
 
         $id = $request->input('id');
         $asesoria = Asesoria::whereId($id)->firstOrFail();
-        $asesoria->status = "Aceptada";
         $asesoria->fechaRealizacion = $request->get('fecha_realizacion');
         $asesoria->fechaTerminacion = $request->get('fecha_terminacion');
-        $asesoria->lugar = "Null";
-        $asesoria->unidad = $request->get('unidad');
         $asesoria->tema = $request->get('tema');
         $asesoria->save();
 
@@ -414,6 +416,7 @@ class DocentesController extends Controller
         $id = $request->input('id');
         $asesoria = Asesoria::whereId($id)->firstOrFail();
         $asesoria->status = "Terminada";
+        $asesoria->observaciones = $request->input('observaciones');
         $asesoria->save();
 
         return redirect(action('DocentesController@solicitudes'));

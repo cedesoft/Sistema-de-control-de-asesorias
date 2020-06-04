@@ -3,9 +3,9 @@
 namespace App\Imports;
 
 use App\Alumnos;
-use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\ToModel;
 
 class AlumnosImport implements ToModel, WithHeadingRow
 {
@@ -22,7 +22,6 @@ class AlumnosImport implements ToModel, WithHeadingRow
             "nombre" => $row['nombre'],
             "correo" => $row['correo'],
             "contraseña" => $row['pass'],
-            "imagen" => $row['imagen'],
             "id_carrera" => $row['carrera'],
         ]);
     }

@@ -257,7 +257,9 @@
                         </div>
                         <div class="form-group">
                             <label id="l" for="fecha_solicitud"><b>Fecha de solicitud</b></label>
-                            <input type="text" class="form-control" id="fecha_solicitud" name="fecha_solicitud" disabled>
+                            <input type="text" class="form-control" id="fecha_solicitud" name="fecha_solicitud"
+                                disabled>
+                            <input type="text" class="d-none" id="fecha_solicitud" name="fecha_solicitud">
                         </div>
                         <div class="form-group">
                             <label id="l" for="fecha_realizacion"><b>Fecha de realización</b></label>
@@ -282,6 +284,7 @@
                         <div class="form-group">
                             <label id="l" for="unidad"><b>Unidad de la Materia</b></label>
                             <input type="text" class="form-control" id="unidad" name="unidad" disabled>
+                            <input type="text" class="d-none" id="unidad" name="unidad">
                         </div>
                         <div class="form-group ">
                             <label id="l" for="tema"><b>Tema</b></label>
@@ -351,7 +354,8 @@
                             </div>
                             <div class="form-group">
                                 <label id="l" for="fecha_solicitud"><b>Fecha de solicitud</b></label>
-                                <input type="date" class="form-control" id="fecha_solicitud" name="fecha_solicitud" disabled>
+                                <input type="date" class="form-control" id="fecha_solicitud" name="fecha_solicitud"
+                                    disabled>
                             </div>
                             <div class="form-group">
                                 <label id="l" for="fecha_realizacion"><b>Fecha de realización</b></label>
@@ -365,7 +369,8 @@
                             </div>
                             <div class="form-group">
                                 <label id="l" for="hora"><b>Lugar</b></label>
-                                <input type="text" class="form-control" id="lugar" name="lugar" placeholder="Lugar de asesoria" disabled>
+                                <input type="text" class="form-control" id="lugar" name="lugar"
+                                    placeholder="Lugar de asesoria" disabled>
                             </div>
                             <div class="form-group">
                                 <label id="l" for="materia"><b>Materia</b></label>
@@ -403,12 +408,13 @@
                     </div>
                     <div class="modal-body">
                         Deseas dar por terminada la asesoria para la materia de <strong id="id_text"></strong>?
-                        Ten en cuenta que esto significa que la asesoria ya fue impartida por el docente.
                     </div>
                     <div class="modal-footer">
                         <form action="{{ route('TerminarAsesoriaDocente') }}" method="POST"
                             enctype="multipart/form-data">
                             {!! csrf_field() !!}
+                            Ingresa observaciones respecto a la asesoria en caso de haberlas.
+                            <textarea name="observaciones" id="observaciones" cols="50" rows="5"></textarea>
                             <input type="text" class="d-none" id="id" name="id">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Terminar</button>

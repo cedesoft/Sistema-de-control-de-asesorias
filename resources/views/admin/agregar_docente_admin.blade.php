@@ -66,7 +66,8 @@
         {!! csrf_field() !!}
         <div class="d-flex justify-content-center">
             <div class="form-group col-md-8">
-                <input class="form-control" type="text" placeholder="Buscar" aria-label="Search" id="buscar" name="buscar">
+                <input class="form-control" type="text" placeholder="Buscar" aria-label="Search" id="buscar"
+                    name="buscar">
             </div>
             <div class="form-group col-md-4">
                 <button type="submit" class="btn btn-primary">Buscar</button>

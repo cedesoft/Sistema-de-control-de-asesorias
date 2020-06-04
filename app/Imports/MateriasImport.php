@@ -23,6 +23,9 @@ class MateriasImport implements ToModel, WithHeadingRow
             "descripcion" => $row['descripcion'],
             "creditos" => $row['creditos'],
             "horas" => $row['horas'],
+            "semestre" => $row['semestre'],
+            "id_carrera" => $row['carrera'],
+            "id_docente" => $row['docente'],
         ]);
     }
 }

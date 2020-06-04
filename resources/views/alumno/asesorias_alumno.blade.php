@@ -391,11 +391,12 @@
                 <div class="modal-footer">
                     <form action="{{ route('TerminarAsesoria') }}" method="POST" enctype="multipart/form-data">
                         {!! csrf_field() !!}
+                        Ingresa observaciones respecto a la asesoria en caso de haberlas.
+                        <textarea name="observaciones" id="observaciones" cols="50" rows="5"></textarea>
                         <input type="text" class="d-none" id="id" name="id">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Terminar</button>
                     </form>
-
                 </div>
             </div>
         </div>

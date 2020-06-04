@@ -6,20 +6,21 @@
         enctype="multipart/form-data">
         {!! csrf_field() !!}
         <h2><b>Solicitar de Asesoria</b></h2>
-        <div class="form-group ">
-            <label id="l" for="alumno"><b>Nombre del alumno</b></label>
-            <input type="text" class="form-control" id="alumno" name="alumno" placeholder="Nombre alumno">
-        </div>
+
+        <input type="text" class="d-none" id="alumno" name="alumno" value="{!! $alumno->id !!}">
+
         <div class="form-group ">
             <label id="l" for="docente"><b>Docente</b></label>
-            <input type="text" class="form-control" id="docente" name="docente" placeholder="Nombre docente"
+            <input type="text" class="d-none" id="docente" name="docente" placeholder="Nombre docente"
                 value="{!! $id_docente !!}">
+            <input type="text" class="form-control" id="" name="" value="{!! $docente->nombre !!}" disabled>
         </div>
         @if ($id_materia != "null")
         <div class="form-group">
             <label id="l" for="materia"><b>Materia</b></label>
-            <input type="text" class="form-control" id="materia" name="materia" placeholder="Materia"
-                value="{!! $id_materia !!}">
+            <input type="text" class="form-control" id="" name="" placeholder="Materia"
+                value="{!! $materia->nombre !!}" disabled>
+            <input type="text" name="materia" id="materia" class="d-none" value="{!! $id_materia !!}">
         </div>
         @else
         <div class="form-group">
@@ -63,6 +64,5 @@
     </form>
     <br>
 </div>
-<br>
-<br>
+<br><br>
 @endsection

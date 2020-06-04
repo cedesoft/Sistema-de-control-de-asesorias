@@ -11,27 +11,36 @@
 </head>
 
 <body>
-    @foreach ($asesorias as $item)
-    <div class="card mb-3">
-        <div class="card-header">
-
-        </div>
-        <div class="card-body">
-            <h5 class="card-title"></h5>
-            <p class="card-text">
-                Fecha de solicitud: {!! $item->fechaSolicitud !!}<br>
-                Fecha de inicio: {!! $item->fechaRealizacion !!} <br>
-                Fecha de terminacion: {!! $item->fechaTerminacion !!} <br>
-                Lugar: {!! $item->lugar !!} <br>
-                Unidad de la materia: {!! $item->unidad !!} <br>
-                Tema: {!! $item->tema !!} <br> 
-                Docente: {!! $item->nom_docente !!} <br>
-                Materia: {!! $item->nom_materia !!} <br>
-                Alumno: {!! $item->nom_alumno !!} <br>
-            </p>
-        </div>
-    </div>
-    @endforeach
+    <h1><center>Reporte de asesorias</center></h1>
+    @if ($fecha)
+        Asesorias de {!! $inicio !!} a {!! $fin !!} <br>
+    @endif
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark ">
+            <tr>
+                <th>Fecha de asesoria</th>
+                <th>Unidad</th>
+                <th>Tema</th>
+                <th>Docente</th>
+                <th>Materia</th>
+                <th>Alumno</th>
+                <th>Observacion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($asesorias as $item)
+            <tr>
+                <td>{!! $item->fechaTerminacion !!}</td>
+                <td>{!! $item->unidad !!}</td>
+                <td>{!! $item->tema !!}</td>
+                <td>{!! $item->nom_docente !!}</td>
+                <td>{!! $item->nom_materia !!}</td>
+                <td>{!! $item->nom_alumno !!}</td>
+                <td>{!! $item->observaciones !!}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">

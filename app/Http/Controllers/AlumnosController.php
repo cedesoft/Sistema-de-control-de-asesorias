@@ -76,9 +76,8 @@ class AlumnosController extends Controller
         return redirect(action('AlumnosController@create'))->with('success','Alumno creado exitosamente');
     }
 
-    public function import(Request $request)
-    {
-        $request->user()->authorizeRoles(['admin','coordinador']);
+    public function import(){
+        //$request->user()->authorizeRoles(['admin','coordinador']);
 
         (new AlumnosImport)->import(request()->file('excel'));
         (new UserImport)->import(request()->file('excel'));
@@ -164,6 +163,7 @@ class AlumnosController extends Controller
         $materias = DB::table('materias')
                         ->leftJoin('docentes','materias.id_docente','=','docentes.id')
                         ->select('materias.*','docentes.nombre as nombre_docente')
+                        ->where('materias.id_carrera',$alumno->id_carrera)
                         ->get();
         //dd($materias);
 
@@ -190,9 +190,15 @@ class AlumnosController extends Controller
     public function solicitar(Request $request, $id_materia, $id_docente){
         $nombre = $request->user()->name;
         $alumno = DB::table('alumnos')->where('nombre',$nombre)->first();
+        $docente = DB::table('docentes')->where('id',$id_docente)->first();
+        $materia = DB::table('materias')->where('id',$id_materia)->first();
 
-        $materias = DB::table('materias')->where('state','1')->get();
-        return view('alumno/solicitar_asesorias', compact('id_docente','id_materia','materias','alumno'));
+        $materias = DB::table('materias')
+                ->where('id_docente',$id_docente)
+                ->where('state','1')
+                ->get();
+
+        return view('alumno/solicitar_asesorias', compact('id_docente','id_materia','materias','alumno','docente','materia'));
     }
 
     /**
@@ -355,11 +361,6 @@ class AlumnosController extends Controller
 
         $id = $request->input('id');
         $asesoria = Asesoria::whereId($id)->firstOrFail();
-        $asesoria->status = "Aceptada";
-        $asesoria->fechaRealizacion = $request->get('fecha_realizacion');
-        $asesoria->fechaTerminacion = $request->get('fecha_terminacion');
-        $asesoria->lugar = "Null";
-        $asesoria->unidad = $request->get('unidad');
         $asesoria->tema = $request->get('tema');
         $asesoria->save();
 
@@ -372,6 +373,7 @@ class AlumnosController extends Controller
         $id = $request->input('id');
         $asesoria = Asesoria::whereId($id)->firstOrFail();
         $asesoria->status = "Terminada";
+        $asesoria->observaciones = $request->input('observaciones');
         $asesoria->save();
 
         return redirect(action('AlumnosController@solicitudes'));

@@ -21,7 +21,6 @@ class DocentesImport implements ToModel, WithHeadingRow
             "nombre" => $row['nombre'],
             "correo" => $row['correo'],
             "contraseña" => $row['pass'],
-            "imagen" => $row['imagen'],
             "id_carrera" => $row['carrera'],
         ]);
     }

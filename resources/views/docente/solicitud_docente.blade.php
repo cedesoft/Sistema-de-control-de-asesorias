@@ -4,9 +4,11 @@
 <form action="{{ route('RealizarSolicitud') }}" method="POST">
     <div id="formulario" class="img">
         <h2><b>Solicitud de Asesoria</b></h2>
+        <input type="text" name="docente" id="docente" class="d-none" value="{!! $docente->id !!}">
         <div class="form-group">
             <label id="l" for="materia"><b>Materia</b></label>
-            <input type="text" class="form-control" id="materia" name="materia" value="{{ $materia }}" required>
+            <input type="text" class="d-none" id="materia" name="materia" value="{{ $materia }}">
+            <input type="text" class="form-control" id="" name="" value="{{ $nom_materia->nombre }}" disabled>
         </div>
         <div class="form-group">
             <label id="l" for="unidad"><b>Unidad</b></label>
@@ -76,9 +78,11 @@
                     <td>
                         <form action="{{ route('borrarAlumnoAgregado') }}" method="POST">
                             {!! csrf_field() !!}
-                            <input type="text" class="d-none" name="num_control" id="num_control" value="{!! $item->num_control !!}">
+                            <input type="text" class="d-none" name="num_control" id="num_control"
+                                value="{!! $item->num_control !!}">
                             <input type="text" class="d-none" id="materia" name="materia" value="{{ $materia }}">
-                            <a href="{{action('DocentesController@EliminarAlumnoAgregado', [$materia, $item->num_control])}}" class="btn btn-danger">Eliminar</a>
+                            <a href="{{action('DocentesController@EliminarAlumnoAgregado', [$materia, $item->num_control])}}"
+                                class="btn btn-danger">Eliminar</a>
                         </form>
                     </td>
                 </tr>
@@ -113,6 +117,18 @@
 
 <div class="container">
     <div class="form-group">
+
+        @if ($alumnos == 0)
+
+        @else
+        @if ($alumno->isEmpty())
+        <div class="">
+            <div class="alert alert-primary col-lg-12" role="alert">
+                No hay coincidencias
+            </div>
+        </div>
+        @else
+        @foreach ($alumno as $item)
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark ">
                 <tr>
@@ -123,13 +139,6 @@
                 </tr>
             </thead>
             <tbody>
-                @if ($alumnos == 0)
-
-                @else
-                @if ($alumno->isEmpty())
-
-                @else
-                @foreach ($alumno as $item)
                 <tr>
                     <td>{!! $item->id !!}</td>
                     <td>{!! $item->nombre !!}</td>
@@ -137,17 +146,18 @@
                     <td>
                         <form action="{{ route('Anexar') }}" method="POST">
                             {!! csrf_field() !!}
-                            <input type="text" class="d-none" name="num_control" id="num_control" value="{!! $item->id !!}">
+                            <input type="text" class="d-none" name="num_control" id="num_control"
+                                value="{!! $item->id !!}">
                             <input type="text" class="d-none" id="materia" name="materia" value="{{ $materia }}">
                             <button type="submit" class="btn btn-success">Agregar</button>
                         </form>
                     </td>
                 </tr>
-                @endforeach
-                @endif
-                @endif
             </tbody>
         </table>
+        @endforeach
+        @endif
+        @endif
     </div>
 </div>
 <br><br><br>

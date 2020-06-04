@@ -43,10 +43,18 @@ class HomeController extends Controller
     public function Reportes(Request $request){
         $request->user()->authorizeRoles(['admin','coordinador']);
         $buscar = false;
+
         $nombre_c = $request->user()->name;
         $coordi = DB::table('coordinador')->where('nombre',$nombre_c)->first();
-        $carrera = DB::table('carreras')->get();
-        return view('admin.reportes_admin', compact('coordi','buscar','carrera'));
+        $carrera = DB::table('carreras')->where('state',1)->get();
+
+        if($request->user()->hasRole('admin')){
+            $carrera_coordi = DB::table('carreras')->get();
+        }else{
+            $carrera_coordi = DB::table('carreras')->where('id',$coordi->id_carrera)->first();
+        }
+
+        return view('admin.reportes_admin', compact('coordi','buscar','carrera','carrera_coordi'));
     }
     
     public static function Buscar(Request $request){
@@ -55,6 +63,12 @@ class HomeController extends Controller
         $buscar = true;
         $nombre_c = $request->user()->name;
         $coordi = DB::table('coordinador')->where('nombre',$nombre_c)->first();
+
+        if($request->user()->hasRole('admin')){
+            $carrera_coordi = DB::table('carreras')->get();
+        }else{
+            $carrera_coordi = DB::table('carreras')->where('id',$coordi->id_carrera)->first();
+        }
 
         $docente = $request->input('docente');
         $alumno = $request->input('alumno');
@@ -77,7 +91,7 @@ class HomeController extends Controller
                                 ->where('asesorias.fechaTerminacion','<=',$fin)
                                 ->get();
                 
-                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin'));
+                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin','carrera_coordi'));
     
             }else if(!empty($docente) && empty($alumno)){
                 $asesorias = DB::table('asesorias')
@@ -92,7 +106,7 @@ class HomeController extends Controller
                                 ->where('asesorias.fechaTerminacion','<=',$fin)
                                 ->get();
     
-                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin'));
+                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin','carrera_coordi'));
             }else if(empty($docente) && !empty($alumno)){
                 $asesorias = DB::table('asesorias')
                                 ->leftjoin('docentes','asesorias.id_docente','=','docentes.id')
@@ -106,7 +120,7 @@ class HomeController extends Controller
                                 ->where('asesorias.fechaTerminacion','<=',$fin)
                                 ->get();
                 
-                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin'));
+                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin','carrera_coordi'));
             }else{
                 $asesorias = DB::table('asesorias')
                                 ->leftjoin('docentes','asesorias.id_docente','=','docentes.id')
@@ -119,7 +133,7 @@ class HomeController extends Controller
                                 ->where('asesorias.fechaTerminacion','<=',$fin)
                                 ->get();
     
-                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin'));
+                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin','carrera_coordi'));
             }
         }else{
             if(!empty($docente) && !empty($alumno)){
@@ -134,7 +148,7 @@ class HomeController extends Controller
                                 ->where('alumnos.id',$alumno)
                                 ->get();
                 
-                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin'));
+                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin','carrera_coordi'));
     
             }else if(!empty($docente) && empty($alumno)){
                 $asesorias = DB::table('asesorias')
@@ -147,7 +161,7 @@ class HomeController extends Controller
                                 ->where('docentes.id_carrera',$carreras)
                                 ->get();
     
-                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin'));
+                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin','carrera_coordi'));
             }else if(empty($docente) && !empty($alumno)){
                 $asesorias = DB::table('asesorias')
                                 ->leftjoin('docentes','asesorias.id_docente','=','docentes.id')
@@ -159,7 +173,7 @@ class HomeController extends Controller
                                 ->where('docentes.id_carrera',$carreras)
                                 ->get();
                 
-                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin'));
+                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin','carrera_coordi'));
             }else{
                 $asesorias = DB::table('asesorias')
                                 ->leftjoin('docentes','asesorias.id_docente','=','docentes.id')
@@ -170,7 +184,7 @@ class HomeController extends Controller
                                 ->where('docentes.id_carrera',$carreras)
                                 ->get();
     
-                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin'));
+                return view('admin.reportes_admin', compact('coordi','asesorias','buscar','docente','alumno','carrera','carreras','inicio','fin','carrera_coordi'));
             }
         }
         
@@ -182,6 +196,8 @@ class HomeController extends Controller
         $carreras = $request->input('carrera');
         $inicio = $request->input('fecha_inicio');
         $fin = $request->input('fecha_final');
+        $fecha = true;
+
         if(!empty($inicio) && !empty($fin)){
             if(!empty($docente) && !empty($alumno)){
                 $asesorias = DB::table('asesorias')
@@ -196,7 +212,7 @@ class HomeController extends Controller
                                 ->where('asesorias.fechaTerminacion','<=',$fin)
                                 ->get();
 
-                $pdf = PDF::loadView('admin.reporte', compact('asesorias'));
+                $pdf = PDF::loadView('admin.reporte', compact('asesorias','fecha','inicio','fin'));
                 return $pdf->download('reporte.pdf');
             }else if(!empty($docente) && empty($alumno)){
                 $asesorias = DB::table('asesorias')
@@ -210,7 +226,7 @@ class HomeController extends Controller
                                 ->where('asesorias.fechaTerminacion','<=',$fin)
                                 ->get();
 
-                $pdf = PDF::loadView('admin.reporte', compact('asesorias'));
+                $pdf = PDF::loadView('admin.reporte', compact('asesorias','fecha','inicio','fin'));
                 return $pdf->download('reporte.pdf');
             }else if(empty($docente) && !empty($alumno)){
                 $asesorias = DB::table('asesorias')
@@ -224,7 +240,7 @@ class HomeController extends Controller
                                 ->where('alumnos.id',$alumno)
                                 ->get();
                 
-                $pdf = PDF::loadView('admin.reporte', compact('asesorias'));
+                $pdf = PDF::loadView('admin.reporte', compact('asesorias','fecha','inicio','fin'));
                 return $pdf->download('reporte.pdf');
             }else{
                 $asesorias = DB::table('asesorias')
@@ -237,10 +253,11 @@ class HomeController extends Controller
                                 ->where('asesorias.fechaTerminacion','>=',$inicio)
                                 ->where('asesorias.fechaTerminacion','<=',$fin)
                                 ->get();
-                $pdf = PDF::loadView('admin.reporte', compact('asesorias'));
+                $pdf = PDF::loadView('admin.reporte', compact('asesorias','fecha','inicio','fin'));
                 return $pdf->download('reporte.pdf');
             }
         }else{
+            $fecha = false;
             if(!empty($docente) && !empty($alumno)){
                 $asesorias = DB::table('asesorias')
                                 ->leftjoin('docentes','asesorias.id_docente','=','docentes.id')
@@ -252,7 +269,7 @@ class HomeController extends Controller
                                 ->where('alumnos.id',$alumno)
                                 ->get();
 
-                $pdf = PDF::loadView('admin.reporte', compact('asesorias'));
+                $pdf = PDF::loadView('admin.reporte', compact('asesorias','fecha'));
                 return $pdf->download('reporte.pdf');
             }else if(!empty($docente) && empty($alumno)){
                 $asesorias = DB::table('asesorias')
@@ -264,7 +281,7 @@ class HomeController extends Controller
                                 ->where('docentes.nombre','like','%'.$docente.'%')
                                 ->get();
 
-                $pdf = PDF::loadView('admin.reporte', compact('asesorias'));
+                $pdf = PDF::loadView('admin.reporte', compact('asesorias','fecha'));
                 return $pdf->download('reporte.pdf');
             }else if(empty($docente) && !empty($alumno)){
                 $asesorias = DB::table('asesorias')
@@ -276,7 +293,7 @@ class HomeController extends Controller
                                 ->where('alumnos.id',$alumno)
                                 ->get();
                 
-                $pdf = PDF::loadView('admin.reporte', compact('asesorias'));
+                $pdf = PDF::loadView('admin.reporte', compact('asesorias','fecha'));
                 return $pdf->download('reporte.pdf');
             }else{
                 $asesorias = DB::table('asesorias')
@@ -287,7 +304,7 @@ class HomeController extends Controller
                                 ->where('asesorias.state','=','1')
                                 ->where('docentes.id_carrera',$carreras)
                                 ->get();
-                $pdf = PDF::loadView('admin.reporte', compact('asesorias'));
+                $pdf = PDF::loadView('admin.reporte', compact('asesorias','fecha'));
                 return $pdf->download('reporte.pdf');
             }
         }

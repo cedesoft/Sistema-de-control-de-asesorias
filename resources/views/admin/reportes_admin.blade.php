@@ -11,9 +11,14 @@
             </div>
             <div class="form-group col-lg-12">
                 <select class="form-control" id="carrera" name="carrera">
-                    @foreach ($carrera as $item)
-                    <option value="{!! $item->id !!}">{!! $item->nombre !!}</option>
-                    @endforeach
+                    @if(Auth::user()->hasRole('admin'))
+                        @foreach ($carrera as $item)
+                        <option value="{!! $item->id !!}">{!! $item->nombre !!}</option>
+                        @endforeach
+                    @else
+                    <option value="{!! $carrera_coordi->id !!}">{!! $carrera_coordi->nombre !!}</option>
+                    @endif
+
                 </select>
             </div>
         </div>
