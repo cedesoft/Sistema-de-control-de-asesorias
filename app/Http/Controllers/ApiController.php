@@ -115,8 +115,9 @@ class ApiController extends Controller
         }else{
             $asesoria = DB::table('asesorias')
                     ->leftjoin('alumnos','asesorias.id_alumno','=','alumnos.id')
+                    ->leftjoin('docentes','asesorias.id_docente','=','docentes.id')
                     ->leftjoin('materias','asesorias.id_materia','=','materias.id')
-                    ->select('asesorias.*','alumnos.nombre as nom_alumno','materias.nombre as nom_materia')
+                    ->select('asesorias.*','alumnos.nombre as nom_alumno','materias.nombre as nom_materia','docentes.nombre as nom_docente')
                     ->where('asesorias.id_docente',$alumno)
                     ->where('asesorias.status','Aceptada')
                     ->where('asesorias.state',1)
@@ -149,8 +150,9 @@ class ApiController extends Controller
         }else{
             $asesoria =  DB::table('asesorias')
                     ->leftjoin('alumnos','asesorias.id_alumno','=','alumnos.id')
+                    ->leftjoin('docentes','asesorias.id_docente','=','docentes.id')
                     ->leftjoin('materias','asesorias.id_materia','=','materias.id')
-                    ->select('asesorias.*','alumnos.nombre as nom_alumno','materias.nombre as nom_materia')
+                    ->select('asesorias.*','alumnos.nombre as nom_alumno','materias.nombre as nom_materia','docentes.nombre as nom_docente')
                     ->where('asesorias.id_docente',$alumno)
                     ->where('asesorias.status','Terminada')
                     ->where('asesorias.state',1)
@@ -183,8 +185,9 @@ class ApiController extends Controller
         }else{
             $asesoria =  DB::table('asesorias')
                     ->leftjoin('alumnos','asesorias.id_alumno','=','alumnos.id')
+                    ->leftjoin('docentes','asesorias.id_docente','=','docentes.id')
                     ->leftjoin('materias','asesorias.id_materia','=','materias.id')
-                    ->select('asesorias.*','alumnos.nombre as nom_alumno','materias.nombre as nom_materia')
+                    ->select('asesorias.*','alumnos.nombre as nom_alumno','materias.nombre as nom_materia','docentes.nombre as nom_docente')
                     ->where('asesorias.id_docente',$alumno)
                     ->where('asesorias.status','Cancelada')
                     ->where('asesorias.state',1)
@@ -205,14 +208,22 @@ class ApiController extends Controller
         $usuario = $request->usuario;
         if($tipo_usuario == "Docente"){
             $solicitud = DB::table('solicitud_alumnos')
-                    ->where('id_docente',$usuario)
-                    ->where('state',1)
+                    ->leftjoin('materias','solicitud_alumnos.id_materia','=','materias.id')
+                    ->leftjoin('alumnos','solicitud_alumnos.id_alumno','=','alumnos.id')
+                    ->select('solicitud_alumnos.*','materias.nombre as nom_materia','alumnos.nombre as nom_alumno')
+                    ->where('solicitud_alumnos.id_docente',$usuario)
+                    ->where('solicitud_alumnos.state',1)
+                    ->where('solicitud_alumnos.status','Pendiente')
                     ->get();
             return response()->json($solicitud);
         }else{
             $solicitud = DB::table('solicitud_alumnos')
-                    ->where('id_alumno',$usuario)
-                    ->where('state',1)
+                    ->leftjoin('materias','solicitud_alumnos.id_materia','=','materias.id')
+                    ->leftjoin('docentes','solicitud_alumnos.id_docente','=','docentes.id')
+                    ->select('solicitud_alumnos.*','materias.nombre as nom_materia','docentes.nombre as nom_docente')
+                    ->where('solicitud_alumnos.id_alumno',$usuario)
+                    ->where('solicitud_alumnos.state',1)
+                    ->where('solicitud_alumnos.status','Pendiente')
                     ->get();
             return response()->json($solicitud);
         }
@@ -230,14 +241,22 @@ class ApiController extends Controller
         $usuario = $request->usuario;
         if($tipo_usuario == "Docente"){
             $solicitud = DB::table('solicitud_docentes')
-                    ->where('id_docente',$usuario)
-                    ->where('state',1)
+                    ->leftjoin('materias','solicitud_docentes.id_materia','=','materias.id')
+                    ->leftjoin('alumnos','solicitud_docentes.id_alumno','=','alumnos.id')
+                    ->select('solicitud_docentes.*','materias.nombre as nom_materia','alumnos.nombre as nom_alumno')
+                    ->where('solicitud_docentes.id_docente',$usuario)
+                    ->where('solicitud_docentes.state',1)
+                    ->where('solicitud_docentes.status','Pendiente')
                     ->get();
             return response()->json($solicitud);
         }else{
             $solicitud = DB::table('solicitud_docentes')
-                    ->where('id_alumno',$usuario)
-                    ->where('state',1)
+                    ->leftjoin('materias','solicitud_docentes.id_materia','=','materias.id')
+                    ->leftjoin('docentes','solicitud_docentes.id_docente','=','docentes.id')
+                    ->select('solicitud_docentes.*','materias.nombre as nom_materia','docentes.nombre as nom_docente')
+                    ->where('solicitud_docentes.id_alumno',$usuario)
+                    ->where('solicitud_docentes.state',1)
+                    ->where('solicitud_docentes.status','Pendiente')
                     ->get();
             return response()->json($solicitud);
         }

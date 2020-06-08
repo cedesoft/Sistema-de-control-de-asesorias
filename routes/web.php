@@ -84,7 +84,7 @@ Route::post('docente/alumno/agregar','DocentesController@AgregarAlumnos')->name(
 Route::post('docente/solicitar','DocentesController@RealizarSolicitud')->name('RealizarSolicitud');
 
 Route::get('/', function(){
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();

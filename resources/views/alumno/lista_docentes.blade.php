@@ -6,7 +6,7 @@
     </div><br>
 </div>
 <div class="container">
-    <div class="d-flex justify-content-center">
+    {{-- <div class="d-flex justify-content-center">
         <div class="form-group col-md-8">
             <input class="form-control" type="text" placeholder="Buscar Docente" aria-label="Search">
         </div>
@@ -14,7 +14,7 @@
             <button type="submit" class="btn btn-primary">
                 Buscar </button>
         </div>
-    </div>
+    </div> --}}
 
     @foreach ($docentes as $docente)
     <div class="card mb-3">
