@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCarrerasTable extends Migration
+class CreateAlumnosAgregadosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateCarrerasTable extends Migration
      */
     public function up()
     {
-        Schema::create('carreras', function (Blueprint $table) {
-            $table->string('id', 15);
-            $table->string('nombre', 95);
-            $table->primary('id');
+        Schema::create('alumnos_agregados', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('num_control',15);
             $table->timestamps();
-            $table->string('state')->default('1');
         });
     }
 
@@ -29,6 +27,6 @@ class CreateCarrerasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carreras');
+        Schema::dropIfExists('alumnos_agregados');
     }
 }

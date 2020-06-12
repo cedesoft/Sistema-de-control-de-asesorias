@@ -17,6 +17,9 @@ class CreateSolicitudDocentesTable extends Migration
             $table->bigIncrements('id');
             $table->string('status', 45);
             $table->date('fechaSolicitud');
+            $table->date('fecha_realizacion');
+            $table->date('fecha_terminacion');
+            $table->text('lugar');
             $table->longText('tema');
             $table->string('unidad', 45);
             $table->string('situacion_academica', 95);
