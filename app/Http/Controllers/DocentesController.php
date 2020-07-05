@@ -37,7 +37,6 @@ class DocentesController extends Controller
         $nombre = $request->user()->name;
         $docente = DB::table('docentes')->where('nombre',$nombre)->first();
         return view('docente.inicio_docente', compact('docente'));
-
     }
 
     /**
@@ -52,10 +51,12 @@ class DocentesController extends Controller
         $nombre = $request->user()->name;
         $coordi = DB::table('coordinador')->where('nombre',$nombre)->first();
 
-        $docentes = Docentes::all()->where('state','1');
+        //$docentes = Docentes::all()->where('state','1');
+        $docentes = Docentes::orderBy('id')->where('state','1')->paginate(10);
         $carreras = DB::table('carreras')->get();
 
-        return view('admin/agregar_docente_admin', compact('docentes', 'carreras','coordi'));
+        $page = true;
+        return view('admin/agregar_docente_admin', compact('docentes', 'carreras','coordi','page'));
     }
 
     /**
@@ -147,7 +148,8 @@ class DocentesController extends Controller
         $nombre = $request->input('buscar');
         $carreras = DB::table('carreras')->get();
         $docentes = DB::table('docentes')->where('nombre','like','%'.$nombre.'%')->where('state','1')->get();
-        return view('admin/agregar_docente_admin', compact('docentes', 'carreras','coordi'));
+        $page = false;
+        return view('admin/agregar_docente_admin', compact('docentes', 'carreras','coordi','page'));
     }
 
     public function solicitudes(Request $request){

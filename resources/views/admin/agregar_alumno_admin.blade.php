@@ -113,6 +113,9 @@
                 @endforeach
             </tbody>
         </table>
+        @if ($page)
+            {{ $alumno->links() }}
+        @endif
     </div>
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"

@@ -136,6 +136,9 @@
                 @endif
             </tbody>
         </table>
+        @if ($page)
+            {{ $materias->links() }}
+        @endif
         <br><br>
     </div>
 </div>

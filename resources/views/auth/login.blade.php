@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="conten">
+<div class="conten" style="background-image: url({!! asset('assets/Images/login.jpeg') !!})">
     <div class="container">
         <div class="d-flex justify-content-center h-100">
             <div class="card">

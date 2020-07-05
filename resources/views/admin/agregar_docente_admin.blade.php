@@ -114,6 +114,10 @@
             @endif
         </tbody>
     </table>
+    @if ($page)
+        {{ $docentes->links() }}
+    @endif
+    
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"

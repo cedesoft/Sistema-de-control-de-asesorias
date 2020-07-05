@@ -39,10 +39,10 @@ class AlumnosController extends Controller
 
         $nombre = $request->user()->name;
         $coordi = DB::table('coordinador')->where('nombre',$nombre)->first();
-
-        $alumno = Alumnos::all()->where('state','1');
+        $page = true;
+        $alumno = Alumnos::orderBy('id')->where('state','1')->paginate(10);
         $carreras = DB::table('carreras')->get();
-        return view('admin/agregar_alumno_admin', compact('carreras','alumno','coordi'));
+        return view('admin/agregar_alumno_admin', compact('carreras','alumno','coordi','page'));
     }
 
     /**
@@ -136,7 +136,8 @@ class AlumnosController extends Controller
         $nombre = $request->input('buscar');
         $alumno = DB::table('alumnos')->where('nombre','like','%'.$nombre.'%')->where('state','1')->get();
         $carreras = DB::table('carreras')->get();
-        return view('admin/agregar_alumno_admin', compact('carreras','alumno','coordi'));
+        $page = false;
+        return view('admin/agregar_alumno_admin', compact('carreras','alumno','coordi','page'));
     }
 
     //-------------Funciones para el Alumno-------------

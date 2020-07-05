@@ -41,6 +41,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('alumno/materias')}}">Materias</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://drive.google.com/drive/folders/1KOja9eY_HTtphaUmNWorcQ2HOgo9nlLW?usp=sharing">Descargar App</a>
+                </li>
             </ul>
 
             {{-- Parte derecha del navBar --}}

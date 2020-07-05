@@ -10,11 +10,11 @@ use App\Docentes;
 
 class MateriasController extends Controller
 {
-    /* public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
     }
-     */
+     
     /**
      * Display a listing of the resource.
      *
@@ -27,11 +27,11 @@ class MateriasController extends Controller
         $nombre = $request->user()->name;
         $coordi = DB::table('coordinador')->where('nombre',$nombre)->first();
 
-        $materias = DB::table('materias')->where('state','1')->get();
+        $materias = DB::table('materias')->orderBy('id')->where('state','1')->paginate(10);
         $carreras = DB::table('carreras')->get();
         $docentes = DB::table('docentes')->where('state','1')->get();
-
-        return view('admin/agregar_materias_admin', compact('materias','carreras','docentes','coordi'));
+        $page = true;
+        return view('admin/agregar_materias_admin', compact('materias','carreras','docentes','coordi','page'));
     }
 
     /**
@@ -107,7 +107,8 @@ class MateriasController extends Controller
         $materias = DB::table('materias')->where('nombre','like','%'.$nombre.'%')->where('state','1')->get();
         $carreras = DB::table('carreras')->get();
         $docentes = DB::table('docentes')->where('state','1')->get();
-        return view('admin/agregar_materias_admin', compact('materias','carreras','docentes','coordi'));
+        $page = false;
+        return view('admin/agregar_materias_admin', compact('materias','carreras','docentes','coordi','page'));
     }
 
     /**

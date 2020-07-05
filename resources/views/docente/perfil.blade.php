@@ -10,7 +10,10 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="background-image:linear-gradient(
+    rgba(206, 206, 248, 0.5),
+    rgba(86, 123, 156, 0.5)
+    ), url({!! asset('assets/Images/login.jpeg') !!})">
     <main class="main">
         <aside class="sidebar">
             <nav class="nav">
@@ -37,7 +40,7 @@
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="foto" name="foto"
-                                        aria-describedby="inputGroupFileAddon04">
+                                        aria-describedby="inputGroupFileAddon04" required>
                                     <label class="custom-file-label" for="foto">Elegir foto</label>
                                 </div>
                             </div>

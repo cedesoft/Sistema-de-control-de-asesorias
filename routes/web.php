@@ -97,6 +97,7 @@ Route::get('mail/send', 'AlumnosController@EnviarEmail');
 Route::get('materias','ApiController@getMaterias');
 Route::get('materias-docente','ApiController@getMateriasDocente');
 Route::get('docentes','ApiController@getDocentes');
+Route::get('usuarios','ApiController@getUsuarios');
 Route::get('lista-docentes','ApiController@Docentes');
 Route::get('solicitar','ApiController@solicitudAlumno');
 Route::get('solicitar-docente','ApiController@solicituDocente');
